@@ -31,39 +31,55 @@ const io = new Server(server,{
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-app.use(express.static(__dirname)); // 👈 This line lets Express serve index.css and others
+app.use(express.static(__dirname)); 
 
 
 app.get('/', (req, res) => {
   res.sendFile(join(__dirname, 'index.html'));
 });
 
-io.on('connection', async (socket) => {
-  socket.on('chat message', async (msg) => {
-    let result;
-    try {
-      result = await db.run('INSERT INTO messages (content) VALUES (?)', msg);
-    } catch (e) {
-      // TODO handle the failure
-      return;
-    }
-    io.emit('chat message', msg, result.lastID);
-  });
 
-  if (!socket.recovered) {
-    // if the connection state recovery was not successful
-    try {
-      await db.each('SELECT id, content FROM messages WHERE id > ?',
-        [socket.handshake.auth.serverOffset || 0],
-        (_err, row) => {
-          socket.emit('chat message', row.content, row.id);
-        }
-      )
-    } catch (e) {
-      // something went wrong
+io.on('connection', socket => {
+  console.log('Ny användare:', socket.id);
+
+  socket.on('createRoom', roomName => {
+    const room = io.sockets.adapter.rooms.get(roomName);
+    if(!room){  
+      socket.join(roomName);
+      socket.emit('roomCreated', roomName);
+      console.log(`Rum ${roomName} skapat av ${socket.id}`);
+
     }
-  }
+  })
+
+  socket.on('joinRoom', roomName =>{
+    const room = io.sockets.adapter.rooms.get(roomName);
+    const numOfPlayers = room ? room.size: 0
+
+    if (!room) {
+      socket.emit('noSuchRoom', roomName);
+
+    } else if (numOfPlayers < 2) {
+      
+      socket.join(roomName);
+      socket.emit('roomJoined', roomName);
+      socket.to(roomName).emit('startGame', room);
+      console.log(`${socket.id} gick med i rum ${roomName}`);
+
+    } else {
+      socket.emit('maxPlayers', roomName);
+      console.log(`Rum ${roomName} är fullt`);
+    }
+
+  })
+
+  socket.on('disconnect', () => {
+    console.log('Användare kopplade bort:', socket.id);
+  });
 });
+
+
+
 
 server.listen(3000, () => {
   console.log('server running at http://localhost:3000');

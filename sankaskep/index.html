@@ -4,54 +4,34 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="stylesheet" href="index.css">
     <title>Socket.IO chat</title>
-    
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="creatOrJoinroom.js"></script>
   </head>
   <body>
-    <ul id="messages"></ul>
-    <form id="form" action="">
-      <input id="input" autocomplete="off" /><button>Send</button>
-      <button id="btn_change_connection_status">Disconnect</button>
-    </form>
-  </body>
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-        const socket = io({
-            auth: {
-            serverOffset: 0
-            }
-        });
+      <!--
+        <div class="wrapper">
+            <h2>Din spelplan</h2>
+            <div id="player-board" class="board"></div>
+            
+            <h2>Motståndarens spelplan</h2>
+            <div id="enemy-board" class="board"></div>
+            
+            <div class="btns">
+                <button>Exit Game</button>
+            </div>    
+        </div>
+        <script src="board.js"></script>
+    --> 
+        <div id="connection">X</div>
+        <h1>Välkomen till sänka skepp</h1>
+        <div class="btn-rooms">
+            <input id="roomCode" placeholder="Rum-namn" />
+            <button onclick="joinRoom()">Join Game</button>
+            <button onclick="createRoom()">Creat Game</button>
+        </div>
+
         
-        const form = document.getElementById('form')
-        const input = document.getElementById('input')
-        const messages = document.getElementById('messages')
+    </body>
+    
 
-        form.addEventListener('submit', (e)=> {
-            e.preventDefault();
-            if(input.value){
-                socket.emit('chat message', input.value)
-                input.value = '';
-            }
-        })
-
-        socket.on('chat message', (msg, serverOffset)=>{
-            const item = document.createElement('li')
-            item.textContent = msg
-            messages.appendChild(item)
-            window.scrollTo(0, document.body.scrollHeight)
-            socket.auth.serverOffset = serverOffset;
-        })
-    </script>
-    <script>
-        const btn_change_connection_status = document.getElementById('btn_change_connection_status')
-        btn_change_connection_status.addEventListener('click', (e)=>{
-            e.preventDefault()
-            if(socket.connected){
-                btn_change_connection_status.innerText = 'Connect'
-                socket.disconnect()
-            }else{
-                btn_change_connection_status.innerText = 'Disconnect'
-                socket.connect()
-            }
-        })
-    </script>
 </html>
