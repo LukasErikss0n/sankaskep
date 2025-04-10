@@ -24,14 +24,14 @@ await db.exec(`
 
 const app = express();
 const server = createServer(app);
-const io = new Server(server,{
+const io = new Server(server, {
   connectionStateRecovery: {}
 });
 
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-app.use(express.static(__dirname)); 
+app.use(express.static(__dirname));
 
 
 app.get('/', (req, res) => {
@@ -44,7 +44,7 @@ io.on('connection', socket => {
 
   socket.on('createRoom', roomName => {
     const room = io.sockets.adapter.rooms.get(roomName);
-    if(!room){  
+    if (!room) {
       socket.join(roomName);
       socket.emit('roomCreated', roomName);
       console.log(`Rum ${roomName} skapat av ${socket.id}`);
@@ -52,18 +52,18 @@ io.on('connection', socket => {
     }
   })
 
-  socket.on('joinRoom', roomName =>{
+  socket.on('joinRoom', roomName => {
     const room = io.sockets.adapter.rooms.get(roomName);
-    const numOfPlayers = room ? room.size: 0
+    const numOfPlayers = room ? room.size : 0
 
     if (!room) {
       socket.emit('noSuchRoom', roomName);
 
     } else if (numOfPlayers < 2) {
-      
+
       socket.join(roomName);
       socket.emit('roomJoined', roomName);
-      socket.to(roomName).emit('startGame', room);
+      io.to(roomName).emit('startGame');
       console.log(`${socket.id} gick med i rum ${roomName}`);
 
     } else {

@@ -1,7 +1,7 @@
 const socket = io();
 let currentRoom = null;
-  
-function joinRoom(){
+
+function joinRoom() {
     const room = document.getElementById('roomCode').value
     if (room) {
         socket.emit('joinRoom', room);
@@ -18,18 +18,18 @@ function generateRoomCode(length = 5) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let code = '';
     for (let i = 0; i < length; i++) {
-    code += characters.charAt(Math.floor(Math.random() * characters.length));
+        code += characters.charAt(Math.floor(Math.random() * characters.length));
     }
     return code;
 }
 
-socket.on('roomCreated', room =>{
+socket.on('roomCreated', room => {
     currentRoom = room;
     document.getElementById('connection').innerText = `Rum skapat: ${room}, väntar på en spelare till`
 })
 
 
-socket.on('roomJoined', room =>{
+socket.on('roomJoined', room => {
     currentRoom = room;
     document.getElementById('connection').innerText = `Rum: ${room}`
 })
@@ -43,10 +43,10 @@ socket.on('noSuchRoom', room => {
 });
 
 
-socket.on('startGame', room => {
-    document.getElementById('connection').innerText = `Rum: ${room} start`;
-    
-    
-    
+socket.on('startGame', () => {
+    document.getElementById('connection').innerText = `Rum: ${currentRoom} start, player: ${socket.id}`;
+
+
+
     // starta spel-logik här
 });
