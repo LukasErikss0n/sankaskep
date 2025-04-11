@@ -29,6 +29,8 @@ const io = new Server(server, {
 });
 
 
+const rooms = {}
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 app.use(express.static(__dirname));
@@ -42,17 +44,18 @@ app.get('/', (req, res) => {
 io.on('connection', socket => {
   console.log('Ny användare:', socket.id);
 
-  socket.on('createRoom', roomName => {
+  socket.on('createRoom', (roomName, size) => {
     const room = io.sockets.adapter.rooms.get(roomName);
     if (!room) {
       socket.join(roomName);
+      rooms[roomName] = { size };
       socket.emit('roomCreated', roomName);
       console.log(`Rum ${roomName} skapat av ${socket.id}`);
 
     }
   })
 
-  socket.on('joinRoom', roomName => {
+  socket.on('joinRoom', (roomName, size) => {
     const room = io.sockets.adapter.rooms.get(roomName);
     const numOfPlayers = room ? room.size : 0
 
@@ -63,6 +66,9 @@ io.on('connection', socket => {
 
       socket.join(roomName);
       socket.emit('roomJoined', roomName);
+      const size = rooms[roomName]?.size || 10
+
+      io.to(roomName).emit('size', size);
       io.to(roomName).emit('startGame');
       console.log(`${socket.id} gick med i rum ${roomName}`);
 

@@ -78,7 +78,6 @@ body {
     background-color: #aaf;
 }
 
-
 h1{
     text-align: center;
 }
@@ -92,4 +91,8 @@ h1{
 
 .btn-rooms button{
     height: 20%;
+}
+
+#size{
+    display: none;
 }

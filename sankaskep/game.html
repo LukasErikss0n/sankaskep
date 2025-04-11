@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <title>Game</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="client.js"></script>
+    <script src="board.js"></script> 
+</head>
+<body>
+    <div class="wrapper">
+        <h2>Din spelplan</h2>
+        <div id="player-board" class="board"></div>
+        
+        <h2>Motståndarens spelplan</h2>
+        <div id="enemy-board" class="board"></div>
+        
+        <div class="btns">
+            <button onclick="exitGame()">Exit Game</button>
+        </div>    
+    </div>
+</body>
+</html>

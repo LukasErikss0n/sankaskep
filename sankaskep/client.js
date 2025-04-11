@@ -1,5 +1,6 @@
 const socket = io();
 let currentRoom = null;
+let size = null;
 
 function joinRoom() {
     const room = document.getElementById('roomCode').value
@@ -9,9 +10,17 @@ function joinRoom() {
 }
 
 function createRoom() {
+    let sizeInput = document.querySelector('input[name="choose-size"]');
     const room = generateRoomCode();
-    console.log(room)
-    socket.emit('createRoom', room);
+    size = parseInt(sizeInput.value.trim()) || 10; // default to 10 if invalid
+
+    socket.emit('createRoom', room, size);
+}
+
+function chooseSize(){
+    const display = document.getElementById("size")
+    display.style.display ='flex'
+    display.style.justifyContent  = "center"
 }
 
 function generateRoomCode(length = 5) {
@@ -21,6 +30,12 @@ function generateRoomCode(length = 5) {
         code += characters.charAt(Math.floor(Math.random() * characters.length));
     }
     return code;
+}
+
+function exitGame(){
+    window.location.href = 'index.html';
+
+    socket.disconnect()
 }
 
 socket.on('roomCreated', room => {
@@ -44,9 +59,6 @@ socket.on('noSuchRoom', room => {
 
 
 socket.on('startGame', () => {
+    window.location.href = 'game.html';
     document.getElementById('connection').innerText = `Rum: ${currentRoom} start, player: ${socket.id}`;
-
-
-
-    // starta spel-logik här
 });
