@@ -79,6 +79,17 @@ io.on('connection', socket => {
 
   })
 
+  socket.on('rejoinRoom', roomName => {
+    socket.join(roomName); // återanslut till rummet
+    const size = rooms[roomName]?.size || 10;
+    socket.emit('size', size);
+  });
+
+  socket.on('playerClick', ({ x, y }) => {
+    console.log(`Spelare ${socket.id} klickade på (${x}, ${y})`);
+    
+  });
+
   socket.on('disconnect', () => {
     console.log('Användare kopplade bort:', socket.id);
   });
