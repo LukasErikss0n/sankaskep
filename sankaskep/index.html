@@ -1,42 +1,28 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="stylesheet" href="index.css">
     <title>Socket.IO chat</title>
     <script src="/socket.io/socket.io.js"></script>
     <script src="client.js"></script>
 
-  </head>
-  <body>
-      <!--
-        <div class="wrapper">
-            <h2>Din spelplan</h2>
-            <div id="player-board" class="board"></div>
-            
-            <h2>Motståndarens spelplan</h2>
-            <div id="enemy-board" class="board"></div>
-            
-            <div class="btns">
-                <button>Exit Game</button>
-            </div>    
-        </div>
-        <script src="board.js"></script>
-    --> 
-        <div id="connection">X</div>
-        <h1>Välkomen till sänka skepp</h1>
-        <div class="btn-rooms">
-            <input id="roomCode" placeholder="Rum-namn" />
-            <button onclick="joinRoom()">Join Game</button>
-            <button onclick="chooseSize()">Creat Game</button>
-        </div>
-        <div id="size">
-            <label for="choose-size">Choose size of the table, (standard is 10)</label>
-            <input  name = "choose-size" type="text">
-            <button id ='btn-size' onclick="createRoom()">Confirm</button>
-        </div>
-        
-    </body>
-    
+</head>
+
+<body>
+    <div id="connection">X</div>
+    <h1>Välkomen till sänka skepp</h1>
+    <div class="btn-rooms">
+        <input id="roomCode" placeholder="Rum-namn" />
+        <button onclick="joinRoom()">Join Game</button>
+        <button onclick="chooseSize()">Creat Game</button>
+    </div>
+    <div id="size">
+        <label for="choose-size">Choose size of the table, (standard is 10)</label>
+        <input name="choose-size" type="text">
+        <button id='btn-size' onclick="createRoom()">Confirm</button>
+    </div>
+</body>
 
 </html>

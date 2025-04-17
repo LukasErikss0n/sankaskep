@@ -34,7 +34,6 @@ function generateRoomCode(length = 5) {
 
 function exitGame(){
     window.location.href = 'index.html';
-
     socket.disconnect()
 }
 
@@ -61,5 +60,4 @@ socket.on('noSuchRoom', room => {
 socket.on('startGame', () => {
     localStorage.setItem('roomName', currentRoom); // spara rumsinfo
     window.location.href = 'game.html';
-    document.getElementById('connection').innerText = `Rum: ${currentRoom} start, player: ${socket.id}`;
 });

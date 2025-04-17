@@ -36,9 +36,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 app.use(express.static(__dirname));
 
 
-app.get('/', (req, res) => {
+/*app.get('/', (req, res) => {
   res.sendFile(join(__dirname, 'index.html'));
-});
+});*/
 
 
 io.on('connection', socket => {
@@ -66,9 +66,7 @@ io.on('connection', socket => {
 
       socket.join(roomName);
       socket.emit('roomJoined', roomName);
-      const size = rooms[roomName]?.size || 10
 
-      io.to(roomName).emit('size', size);
       io.to(roomName).emit('startGame');
       console.log(`${socket.id} gick med i rum ${roomName}`);
 
@@ -87,7 +85,7 @@ io.on('connection', socket => {
 
   socket.on('playerClick', ({ x, y }) => {
     console.log(`Spelare ${socket.id} klickade på (${x}, ${y})`);
-    
+
   });
 
   socket.on('disconnect', () => {
